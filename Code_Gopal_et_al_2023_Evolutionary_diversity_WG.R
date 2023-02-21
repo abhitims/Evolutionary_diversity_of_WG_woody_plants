@@ -1,25 +1,13 @@
+# --------------------------------General Information--------------------------------------------------#
 #Range restricted old and young lineages show the southern Western Ghats to be both museum and cradle of diversity for woody plants
 #Authors: Abhishek Gopal,  D. K. Bharti,  Navendu Page,  Kyle G. Dexter, Ramanathan Krishnamani, Ajith Kumar, Jahnavi Joshi
 
 #Recommended citation for this script:
 #Gopal, A., Bharti, D. K., Page, N., Dexter, K. G., Krishnamani, R., Kumar, A., & Joshi, J. (2023). Range restricted old and young lineages show the southern Western Ghats 
-#to be both museum and cradle of diversity for woody plants. *Proceedings of the Royal Society B.*
+#to be both museum and cradle of diversity for woody plants. Proceedings of the Royal Society B.
 
 #Correspondence: abhishekg@csirccmb.org; abhishekgopal1993@gmail.com
-
-# Abstract
-#The Western Ghats (WG) mountain chain is a global biodiversity hotspot with high diversity and endemicity of woody plants. The latitudinal breadth
-#of the WG offers an opportunity to determine the evolutionary drivers of latitudinal diversity patterns. We examined the spatial patterns of evolutionary 
-#diversity using complementary phylogenetic diversity and endemism measures. To examine if different regions of the WG serve as a museum or cradle of evolutionary 
-#diversity, we examined the distribution of 470 species based on distribution modelling and occurrence locations across the entire region. In accordance with the 
-#expectation, we found that the southern WG is both a museum and cradle of woody plant evolutionary diversity, as both old and young evolutionary lineages are 
-#restricted to the southern WG. The diversity gradient is likely driven by high geo-climatic stability in the south and phylogenetic niche conservatism for moist 
-#and aseasonal sites. This is corroborated by persistent lineage nestedness at almost all evolutionary depths (10–135 million years), and a strong correlation of 
-#evolutionary diversity with drought seasonality, precipitation and elevation. Our results highlight the global value of the WG, demonstrating, in particular, the 
-#importance of protecting the southern WG – an engine of plant diversification and persistence.
- 
-# Keywords: Cradles; Museums; Nestedness; Phylogenetic diversity; Phylogenetic endemism; Western Ghats 
-
+# ------------------------------------------------------------------------------------------------------#
 
 #rm(list = ls())
 
@@ -27,7 +15,7 @@
 #Edit -> Folding -> Collapse_all
 
 
-final_sub_path <- paste0("/Volumes/GoogleDrive-101738089785336286937/Other computers/HP laptop (2021)/D:/PhD/Evol_Eco Lab/Chapters/Chapter 1/Final_submission/Draft/Bioarxiv_12Dec22")
+final_sub_path <- paste0("C:/Users/Downloads/Evolutionary_diveristy_of_Western_Ghats_woody_plants-main/Evolutionary_diveristy_of_Western_Ghats_woody_plants-main")
 
 # ----------------------------Structure of the code----------------------------------------------#
 # 1.Loading all packages and reading and cleaning the data
@@ -102,25 +90,27 @@ packages_install_load("metacom")
 #Plotting
 packages_install_load(c("paletteer","patchwork","gridExtra","gt","ggrepel","corrplot","cowplot","psych"))#,"phyloch"))
 
-#------------------------------------------------------------------------------#
+#-----------------------------------------------------------------------------------------#
 #-------------------------1.b.Input shape files of WG---------------------------------------
 
 wgs<-"+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"
-wg <- readOGR(dsn=paste0(final_sub_path,'/processed_data/Shapefile/WG_boundary'), layer='wg_boundary')
+wg <- readOGR(dsn=paste0(final_sub_path,'/Appendix_S3_processed_data/processed_data/Shapefile/WG_boundary'), layer='wg_boundary')
 
 #-------------------------1.c.Read input data regarding occ location----------------------------
-biodiv_final_all.subset <- read.csv(paste0(final_sub_path,"/processed_data/biodiv_final_all_subset_470sp_6Dec22.csv"),strip.white=TRUE)
-biodiv_final_all <- read.csv(paste0(final_sub_path,"/processed_data/biodiv_final_all_470sp_6Dec22.csv"),strip.white=TRUE)
-WG_pred <- read.csv(paste0(final_sub_path,"/processed_data/WG_pred_470_CWD.csv"),strip.white=TRUE)
-biodiv.mat.clip <- read.csv(paste0(final_sub_path,"/processed_data/biodiv.mat.clip.SDM_only_348_6Dec22.csv"),strip.white=TRUE)
+biodiv_final_all <- read.csv(paste0(final_sub_path,"/Appendix_S3_processed_data/processed_data/biodiv_final_all_470sp_6Dec22.csv"),strip.white=TRUE)
+biodiv_final_all.subset <- read.csv(paste0(final_sub_path,"/Appendix_S3_processed_data/processed_data/biodiv_final_all_subset_470sp_6Dec22.csv"),strip.white=TRUE)
+biodiv.mat.clip <- read.csv(paste0(final_sub_path,"/Appendix_S3_processed_data/processed_data/biodiv.mat.clip.SDM_only_348_6Dec22.csv"),strip.white=TRUE)
+
+WG_pred <- read.csv(paste0(final_sub_path,"/Appendix_S3_processed_data/processed_data/WG_pred_470_CWD.csv"),strip.white=TRUE)
+
 
 #-------------------------1.d.Read input tree -----------------------------------------------
-phylo_tree_final <- read.tree(paste0(final_sub_path,"/processed_data/Tree_470_6Dec22.tre"))
+phylo_tree_final <- read.tree(paste0(final_sub_path,"/Appendix_S3_processed_data/processed_data/Tree_470_6Dec22.tre"))
 
 # The data modified from the input tree to include order, family name and node number
-All_sp_checklist.node <- read.csv(paste0(final_sub_path,"/processed_data/All_sp_checklist_node_final_6Dec22.csv"),strip.white=TRUE)
+All_sp_checklist.node <- read.csv(paste0(final_sub_path,"/Appendix_S3_processed_data/processed_data/All_sp_checklist_node_final_6Dec22.csv"),strip.white=TRUE)
 
-#------------------------------------------------------------------------------#
+#----------------------------------------------------------------------------------------------#
 #-------------------------1.e.Data cleaning for making all the names compatible-----------------
 #As csv changes - to . while saving/reading
 biodiv_final_all.subset
@@ -213,7 +203,7 @@ no_lineages <- function(commat,phy,bin_size) {
 
 rownames(biodiv_final_all.subset) <- paste0(biodiv_final_all.subset$x,":",biodiv_final_all.subset$y)
 
-#Calling the function to calculate the number of lineages i each 10 x 10 grid cell
+#Calling the function to calculate the number of lineages in each 10 x 10 grid cell
 # at a time slice for 1 Mya
 
 no_lineages_sim <- no_lineages( biodiv_final_all.subset,phylo_tree_final,1)
@@ -222,9 +212,10 @@ no_lineages_sim <- no_lineages( biodiv_final_all.subset,phylo_tree_final,1)
 plot(-as.numeric(colnames(no_lineages_sim)),no_lineages_sim[1,],type="l")
 plot(-as.numeric(colnames(no_lineages_sim)),no_lineages_sim[105,],type="l")
 
-##"This function calculates TILD, both 'raw' and log-transformed version
-#  lineages = a lineage composition matrix derived from the above function
-#  "In Dexter et al. 2019. Forests, we referred to the log-transformed version
+# "This function calculates TILD, both 'raw' and log-transformed version
+#  lineages = a lineage composition matrix derived from the above function"
+
+#  "In Dexter et al. 2019. Forests, were referred to the log-transformed version
 #   as the TILD metric
 #   The raw (non-log-tranformed) version is in fact mathematically identical to raw 
 #   phylogenetic diversity, and is included here for testing"
@@ -282,7 +273,7 @@ SR_PD <- pd(WG_mat, phylo_tree_final, include.root=T)
 
 #-------------------------2.c. Measuring PE--------------------------------------------------
 #Calculating PE; Refer to the main text for more info; We are using only those species 
-#for which we have run the SDM for, 350 species. For PE Calculations we will be using this 
+#for which we have run the SDM for, 348 species. For PE Calculations we will be using this 
 #subset of data.
 
 biodiv.mat.clip
@@ -369,6 +360,7 @@ plot_TILD_WG <- WG_all_indices%>%  ggplot (aes(x=x , y=y,fill=TILD )) +
                                   round(max(WG_all_indices$TILD),2)))+theme_custom
 
 plot_SR_WG+plot_PD_WG+plot_PE_350sp_WG+plot_TILD_WG
+
 #-------------------------2.e. Diversity measure wrt Biog zone--------------------------------------------
 
 WG_all_indices
@@ -445,12 +437,12 @@ cor.test(WG_all_indices$TILD,WG_all_indices$PE)
 ############################################################################################
 
 # -----------------------------------------------------------------------------------------#
-# ---------------------4.PD at diff time period, LTT at each lat and lineage age trends----#
+# ---------------------3.PD at diff time period, LTT at each lat and lineage age trends----#
 # -----------------------------------------------------------------------------------------#
 
 #-------------------------3.a. PD at diff time period---------------------------------------
 #-----------------------------3.a.1.Tree slices---------------------------------------------
-# #Labelling all the key orders in the tree-
+# Labelling all the key orders in the tree-
 order_names <-  matrix(nrow=35,ncol=2)
 order_names[,1] <- All_sp_checklist.node %>% dplyr::select(order) %>%distinct() %>% unlist(use.names = F)
 
@@ -489,6 +481,7 @@ node_label
 node_label <- data.frame(label=node_label$label[-5])# this is the oldest for the current phylogeny not labelling this
 node_label <-phylo_tree_final%>% as_tibble() %>% filter(label %in% node_label$label)
 node_label$revised_lab <-node_label$label
+
 #Renaming for standardisation
 node_label$revised_lab[c(2,4,5:10)] <- c( "Eudicotyledons", "Campanulids" ,
                                           "Lamiids", "Gentianales",
@@ -506,7 +499,7 @@ tree <- phylo_tree_final
 age_list <- c(seq(10,130, by=10),135)
 
 # The code for slicing the tree is modified from Daru et al. 2018.
-# Here the tree is code collapsed from the tips to the root at different time periods.
+# Here the tree is collapsed from the tips to the root at different time periods.
 # The terminals are sticky and as such each  branch length has an identity of all the
 # descendants, the branch length of the terminal nodes is
 # 0 at at time period older than their divergence times.
@@ -1508,11 +1501,6 @@ dat <- WG_pred_indices %>% filter(!is.na(elevation))  %>%
 cor.test(dat$CWD,dat$PD) 
 cor.test(dat$CWD,dat$PD,method=c("spearman")) 
 
-
-cor.test(dat$elev,dat$PE) 
-cor.test(dat$elev,dat$PE,method=c("spearman")) 
-
-
 rm(dat)
 
 reg_cor <- function(div_index,preds)
@@ -1612,43 +1600,46 @@ wrap_plots(
 width= 12, height = 8, dpi =600,bg="white")
 
 
-#-------------------------------Figure 2a: Diversity at diff time depth-------------------
-PD_depth_lat_plot <-   wrap_plots(
-  plot_PD.depth[[15]]+ylab("Latitude")+xlab("Longitude")+theme_custom+
-    ylim(8, max(WG_all_indices$y))+#clipping the WG at 19 as no predictions were done over that
-    theme(legend.key.size = unit(0.3, "cm"),legend.position=c(0.3,0.25),
-          axis.title = element_text( size=20,face="bold",   family="serif"),
-          axis.text = element_text( size=20,colour = "black", family = "serif" ),
-          legend.title = element_text(size=16,face = "bold", family = "serif"),
-          legend.text = element_text( size=16, family = "serif")),
-  
-  plot_PD.depth[[13]]+ylim(8, max(WG_all_indices$y))+#clipping the WG at 19 as no predictions were done over that
-    theme(legend.key.size = unit(0.3, "cm"),
-          legend.position=c(0.3,0.25),legend.title = element_text(size=16,face = "bold", family = "serif"),
-          legend.text = element_text( size=16, family = "serif")),
-  plot_PD.depth[[10]]+ylim(8, max(WG_all_indices$y))+#clipping the WG at 19 as no predictions were done over that
-    theme(legend.key.size = unit(0.3, "cm"),
-          legend.position=c(0.3,0.25),legend.title = element_text(size=16,face = "bold", family = "serif"),
-          legend.text = element_text( size=16, family = "serif")),
-  plot_PD.depth[[7]]+ylim(8, max(WG_all_indices$y))+#clipping the WG at 19 as no predictions were done over that
-    theme(legend.key.size = unit(0.3, "cm"),
-          legend.position=c(0.3,0.25),legend.title = element_text(size=16,face = "bold", family = "serif"),
-          legend.text = element_text( size=16, family = "serif")),
-  plot_PD.depth[[4]]+ylim(8, max(WG_all_indices$y))+#clipping the WG at 19 as no predictions were done over that
-    theme(legend.key.size = unit(0.3, "cm"),
-          legend.position=c(0.3,0.25),legend.title = element_text(size=16,face = "bold", family = "serif"),
-          legend.text = element_text( size=16, family = "serif")),
-  plot_PD.depth[[2]]+ylim(8, max(WG_all_indices$y))+#clipping the WG at 19 as no predictions were done over that
-    theme(legend.key.size = unit(0.3, "cm"),
-          legend.position=c(0.3,0.25),legend.title = element_text(size=16,face = "bold", family = "serif"),
-          legend.text = element_text( size=16, family = "serif")),nrow=1)
+# -------------------------------Figure 2a: Diversity at diff time depth-------------------
+# PD_depth_lat_plot <-   wrap_plots(
+#   plot_PD.depth[[15]]+ylab("Latitude")+xlab("Longitude")+theme_custom+
+#     ylim(8, max(WG_all_indices$y))+#clipping the WG at 19 as no predictions were done over that
+#     theme(legend.key.size = unit(0.3, "cm"),legend.position=c(0.3,0.25),
+#           axis.title = element_text( size=20,face="bold",   family="serif"),
+#           axis.text = element_text( size=20,colour = "black", family = "serif" ),
+#           legend.title = element_text(size=16,face = "bold", family = "serif"),
+#           legend.text = element_text( size=16, family = "serif")),
+# 
+#   plot_PD.depth[[13]]+ylim(8, max(WG_all_indices$y))+#clipping the WG at 19 as no predictions were done over that
+#     theme(legend.key.size = unit(0.3, "cm"),
+#           legend.position=c(0.3,0.25),legend.title = element_text(size=16,face = "bold", family = "serif"),
+#           legend.text = element_text( size=16, family = "serif")),
+#   plot_PD.depth[[10]]+ylim(8, max(WG_all_indices$y))+#clipping the WG at 19 as no predictions were done over that
+#     theme(legend.key.size = unit(0.3, "cm"),
+#           legend.position=c(0.3,0.25),legend.title = element_text(size=16,face = "bold", family = "serif"),
+#           legend.text = element_text( size=16, family = "serif")),
+#   plot_PD.depth[[7]]+ylim(8, max(WG_all_indices$y))+#clipping the WG at 19 as no predictions were done over that
+#     theme(legend.key.size = unit(0.3, "cm"),
+#           legend.position=c(0.3,0.25),legend.title = element_text(size=16,face = "bold", family = "serif"),
+#           legend.text = element_text( size=16, family = "serif")),
+#   plot_PD.depth[[4]]+ylim(8, max(WG_all_indices$y))+#clipping the WG at 19 as no predictions were done over that
+#     theme(legend.key.size = unit(0.3, "cm"),
+#           legend.position=c(0.3,0.25),legend.title = element_text(size=16,face = "bold", family = "serif"),
+#           legend.text = element_text( size=16, family = "serif")),
+#   plot_PD.depth[[2]]+ylim(8, max(WG_all_indices$y))+#clipping the WG at 19 as no predictions were done over that
+#     theme(legend.key.size = unit(0.3, "cm"),
+#           legend.position=c(0.3,0.25),legend.title = element_text(size=16,face = "bold", family = "serif"),
+#           legend.text = element_text( size=16, family = "serif")),nrow=1)
+# 
+# 
+# #ggsave(paste0(final_sub_path,"/Final_plots/6_Dec_22/2a_PD_time_slice_select_clipped.png"),
+# plot=last_plot(),
+# device = "png",width = 16, height = 8, units = "in",dpi=600)
 
+#-------------------------------Figure 2a: LTT -------------------
+devtools::install_github("aljrico/gameofthrones")
+library(gameofthrones)
 
-#ggsave(paste0(final_sub_path,"/Final_plots/6_Dec_22/2a_PD_time_slice_select_clipped.png"),
-plot=last_plot(),
-device = "png",width = 16, height = 8, units = "in",dpi=600)
-
-#-------------------------------Figure 2b: LTT -------------------
 LTT_lat_plot <- LTT_lat.long %>% 
   ggplot(aes(x = reorder(age, desc(age)),y=log10(num), colour=lat.bin, group=lat.bin))+
   geom_line()+xlab("Age")+ylab(expression(paste(log[10],"(Num of Lineages)")))+
@@ -1668,7 +1659,7 @@ LTT_lat_plot
 #ggsave(paste0(final_sub_path,"/Final_plots/6_Dec_22/2b_LTT.png"), plot=last_plot(), units = "in",
 width= 12, height = 10, dpi =600)
 
-#-------------------------------Figure 2c: Lineage age trends-------------------
+#-------------------------------Figure 2b: Lineage age trends-------------------
 plot_age_lat <- function(age)#,label)
 {  
   temp_age <- age_lat_distn(phylo_tree_final,WG.mat.reorder,
@@ -1689,7 +1680,7 @@ plot_age_lat <- function(age)#,label)
 Lineage_age_lat_plot <- wrap_plots( mapply(plot_age_lat,rev(temp_age_list),#label=label,
                                            SIMPLIFY = F),nrow = 1)
 
-#Lineage_age_lat_plot + plot_annotation(tag_levels = 'a') & theme(plot.tag = element_text(family = 'Times New Roman'))
+Lineage_age_lat_plot + plot_annotation(tag_levels = 'a') & theme(plot.tag = element_text(family = 'Times New Roman'))
 #ggsave(paste0(final_sub_path,"/Final_plots/6_Dec_22/2c_Lineage_age_lat_rich.png"), plot=last_plot(),
 units = "in", width= 22, height = 4, dpi =600)
 
