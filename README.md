@@ -2,7 +2,7 @@
 
 The code examines the evolutionary diversity of woody plants in the Western Ghats. It takes in the output of the SDMs run for 348 species and occurence locations for 122 species, which is stacked at 10x10 km resolution. The phylogenetic tree is built using V. phylomaker. For more details refer to the Methods section in the manuscript. The code for the SDMs is taken from https://github.com/bhartidk/centipede_diversity_endemism
 
-# GENERAL INFORMATION
+# General information
 
 **Title: Range restricted old and young lineages show the southern Western Ghats to be both museum and cradle of diversity for woody plants**  
 
@@ -14,14 +14,16 @@ The Western Ghats (WG) mountain chain is a global biodiversity hotspot with high
 Keywords: Cradles; Museums; Nestedness; Phylogenetic diversity; Phylogenetic endemism; Western Ghats 
 
 
-# SHARING/ACCESS INFORMATION
+# Sharing/ access information
 
 The data and the code can be used for non-commercial purposes (The MIT Licence).  
 
 **Recommended citation for this dataset:**  
 Gopal, A., Bharti, D. K., Page, N., Dexter, K. G., Krishnamani, R., Kumar, A., & Joshi, J. (2023). Range restricted old and young lineages show the southern Western Ghats to be both museum and cradle of diversity for woody plants. *Proceedings of the Royal Society B*.
 
-# DATA OVERVIEW
+# Data overview
+
+**Appedix_S3_processed_data.zip**  
 
 **CSV files**
 
