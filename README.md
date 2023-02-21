@@ -1,2 +1,2 @@
-# Evolutionary_diveristy_of_Western_Ghats_woody_plants
+# Evolutionary diveristy of Western Ghats woody plants
 The code examines the evolutionary diversity of woody plants in the Western Ghats.
