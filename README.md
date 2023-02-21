@@ -27,23 +27,22 @@ Gopal, A., Bharti, D. K., Page, N., Dexter, K. G., Krishnamani, R., Kumar, A., &
 
 **CSV files**
 
-1. biodiv_final_all_470sp_6Dec22: This is the complete dataset with 1756 10 x 10 km grid cells.
-2. biodiv_final_all_subset_470sp_6Dec22:From the above dataset, grids with less than 10 species were removed (minimum  
+1. **biodiv_final_all_470sp_6Dec22**: This is the complete dataset with 1756 10 x 10 km grid cells.
+2. **biodiv_final_all_subset_470sp_6Dec22**:From the above dataset, grids with less than 10 species were removed (minimum  
                                         observed species richness in the raw plot dataset). This was done to get a conservative estimate of diversity as these sites 
                                         may not represent evergreen sites and thus may be associated with poor model predictability 
-3. biodiv.mat.clip.SDM_only_348_6Dec22: The above dataset is converted to a matrix with grid name (lat and long) as rownames. This was done for ease of calculation of 
-                                        diversity indices.
-4. All_sp_checklist_node_final_6Dec22:  This dataset merges the species list with the tree to get the node number and branch length of each species.
-5. WG_pred_470_CWD:  This contains the climatic variables at 10 x 10 km resolution  
+3. **biodiv.mat.clip.SDM_only_348_6Dec22**: The above dataset is converted to a matrix with grid name (lat and long) as rownames. This was done for ease of calculation 
+                                            of diversity indices.
+4. **All_sp_checklist_node_final_6Dec22**:  This dataset merges the species list with the tree to get the node number and branch length of each species.
+5. **WG_pred_470_CWD**:  This contains the climatic variables at 10 x 10 km resolution  
 
 **Tree file as created by V. phylomaker**  
-1. Tree_470_6Dec22:  Phylogenetic tree created using V.phylomaker
-
+1. **Tree_470_6Dec22**:  Phylogenetic tree created using V.phylomaker
 
 **Shapefiles**  
 
-1. ne_10m_coastline: coastline of the subcontinent
-2. WG_boundary:  Western Ghat shapefile
+1. **ne_10m_coastline**: coastline of the subcontinent
+2. **WG_boundary**:  Western Ghat shapefile
 
 
 # Code overview   
