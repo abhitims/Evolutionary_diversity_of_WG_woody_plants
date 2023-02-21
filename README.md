@@ -14,7 +14,7 @@ The Western Ghats (WG) mountain chain is a global biodiversity hotspot with high
 Keywords: Cradles; Museums; Nestedness; Phylogenetic diversity; Phylogenetic endemism; Western Ghats 
 
 
-# Sharing/ access information
+# Sharing/access information
 
 The data and the code can be used for non-commercial purposes (The MIT Licence).  
 
