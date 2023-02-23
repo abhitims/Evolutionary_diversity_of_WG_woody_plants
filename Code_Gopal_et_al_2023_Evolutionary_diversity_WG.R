@@ -72,7 +72,7 @@ packages_install_load <- function(x){
 }
 #--------------Loading/installing all packages------------------------------#
 #Data wrangling
-packages_install_load(c("tidyverse", "googledrive","googlesheets4","reshape2","stringr", "stringi", "readxl","Taxonstand" ))
+packages_install_load(c("tidyverse","reshape2","stringr", "stringi", "readxl","Taxonstand" ))
 #SDM maxent
 packages_install_load(c("raster","sp","rgdal","maps","rgeos","dismo","dplyr",
                         "Hmisc","devtools","digest","rJava","geosphere","ncdf4","sf","MASS"))
