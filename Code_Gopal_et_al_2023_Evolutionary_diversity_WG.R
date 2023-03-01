@@ -15,7 +15,7 @@
 #Edit -> Folding -> Collapse_all
 
 
-final_sub_path <- paste0("C:/Users/Downloads/Evolutionary_diveristy_of_Western_Ghats_woody_plants-main/Evolutionary_diveristy_of_Western_Ghats_woody_plants-main")
+final_sub_path <- paste0("/Users/abhishek/Downloads/Evolutionary_diversity_of_WG_woody_plants-main")
 
 # ----------------------------Structure of the code----------------------------------------------#
 # 1.Loading all packages and reading and cleaning the data
@@ -94,21 +94,21 @@ packages_install_load(c("paletteer","patchwork","gridExtra","gt","ggrepel","corr
 #-------------------------1.b.Input shape files of WG---------------------------------------
 
 wgs<-"+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"
-wg <- readOGR(dsn=paste0(final_sub_path,'/Appendix_S3_processed_data/processed_data/Shapefile/WG_boundary'), layer='wg_boundary')
+wg <- readOGR(dsn=paste0(final_sub_path,'/processed_data/Shapefile/WG_boundary'), layer='wg_boundary')
 
 #-------------------------1.c.Read input data regarding occ location----------------------------
-biodiv_final_all <- read.csv(paste0(final_sub_path,"/Appendix_S3_processed_data/processed_data/biodiv_final_all_470sp_6Dec22.csv"),strip.white=TRUE)
-biodiv_final_all.subset <- read.csv(paste0(final_sub_path,"/Appendix_S3_processed_data/processed_data/biodiv_final_all_subset_470sp_6Dec22.csv"),strip.white=TRUE)
-biodiv.mat.clip <- read.csv(paste0(final_sub_path,"/Appendix_S3_processed_data/processed_data/biodiv.mat.clip.SDM_only_348_6Dec22.csv"),strip.white=TRUE)
+biodiv_final_all <- read.csv(paste0(final_sub_path,"/processed_data/biodiv_final_all_470sp_6Dec22.csv"),strip.white=TRUE)
+biodiv_final_all.subset <- read.csv(paste0(final_sub_path,"/processed_data/biodiv_final_all_subset_470sp_6Dec22.csv"),strip.white=TRUE)
+biodiv.mat.clip <- read.csv(paste0(final_sub_path,"/processed_data/biodiv.mat.clip.SDM_only_348_6Dec22.csv"),strip.white=TRUE)
 
-WG_pred <- read.csv(paste0(final_sub_path,"/Appendix_S3_processed_data/processed_data/WG_pred_470_CWD.csv"),strip.white=TRUE)
+WG_pred <- read.csv(paste0(final_sub_path,"/processed_data/WG_pred_mean_final.csv"),strip.white=TRUE)
 
 
 #-------------------------1.d.Read input tree -----------------------------------------------
-phylo_tree_final <- read.tree(paste0(final_sub_path,"/Appendix_S3_processed_data/processed_data/Tree_470_6Dec22.tre"))
+phylo_tree_final <- read.tree(paste0(final_sub_path,"/processed_data/Tree_470_6Dec22.tre"))
 
 # The data modified from the input tree to include order, family name and node number
-All_sp_checklist.node <- read.csv(paste0(final_sub_path,"/Appendix_S3_processed_data/processed_data/All_sp_checklist_node_final_6Dec22.csv"),strip.white=TRUE)
+All_sp_checklist.node <- read.csv(paste0(final_sub_path,"/processed_data/All_sp_checklist_node_final_6Dec22.csv"),strip.white=TRUE)
 
 #----------------------------------------------------------------------------------------------#
 #-------------------------1.e.Data cleaning for making all the names compatible-----------------
@@ -373,7 +373,7 @@ WG_all_indices <- WG_all_indices %>% mutate(biog = ifelse(y <= 11,
                                                           no= ifelse(y >= 15.8, "NWG","CWG")))
 
 biog_summ <- WG_all_indices %>% group_by(biog) %>% 
-            summarise(mean(SR), mean(TILD), mean(PE), mean(PD),
+  summarise(mean(SR), mean(TILD), mean(PE), mean(PD),
             median(SR), median(TILD), median(PE), median(PD)) %>% as.data.frame()
 
 
@@ -507,19 +507,19 @@ age_list <- c(seq(10,130, by=10),135)
 
 for( i in age_list ){
   new.tree[[i]]<-tree
-
+  
   #specify here threshold age for collapsing nodes in the tree
   node.age<-i
-
+  
   print(node.age)
-
+  
   goal.length<-max(cophenetic(tree))/2-node.age
-
+  
   while (round(max(cophenetic(new.tree[[i]]))/2, 10)>round(goal.length,10)){
     k<-nodeHeights(new.tree[[i]])
-
+    
     w<-which(k[,2]==max(k[,2]))[1]
-
+    
     if(k[w,2]>goal.length){
       z<-k[w,2]-goal.length
       new.tree[[i]]$edge.length[w]<-new.tree[[i]]$edge.length[w]-z
@@ -527,15 +527,15 @@ for( i in age_list ){
         new.tree[[i]]$edge.length[w]<-0
       }#end if
     }#end if
-
-
+    
+    
   }#end while
-
+  
   plot(new.tree[[i]], show.tip=F, main=paste0(i, " Mya"))
   plot_tree[[i+1]] <- revts(ggtree(new.tree[[i]]) %<+% order_names %<+%node_label +
                               geom_label(aes(label = order)) +geom_label(aes(label = revised_lab)) +
                               ggtitle(paste0(i, " Mya"))+ theme(plot.title = element_text(hjust = 0.5)))
-
+  
 }
 
 # Inputting the tree at current time period
@@ -571,7 +571,7 @@ plot_PD.depth <- list()
 for(i in 1:14)
 {
   temp_data <- data.frame(cbind(PD.depth[,c("long", "lat")],age= PD.depth[,i])) %>% mutate(age=round(age,2))
-
+  
   temp_plot  <- ggplot (data=temp_data,aes(x=long , y=lat,fill=age )) +
     geom_raster()+ ggtitle(paste0("PD ",names(PD.depth)[i], " Mya")) +
     geom_polygon(data=wg, aes(x=long, y=lat, group=group), size=0.1, color="black", fill=NA) +
@@ -579,8 +579,8 @@ for(i in 1:14)
     coord_fixed()+theme_void()+
     scale_fill_paletteer_c("grDevices::YlOrRd", direction = -1,
                            breaks=c(round(min(temp_data$age),2),max(temp_data$age)),"PD")
-
-
+  
+  
   plot_PD.depth[[i+1]] <- temp_plot
 }
 
@@ -610,7 +610,7 @@ wrap_plots(
           axis.text = element_text( size=20,colour = "black", family = "serif" ),
           legend.title = element_text(size=16,face = "bold", family = "serif"),
           legend.text = element_text( size=16, family = "serif")),
-
+  
   plot_PD.depth[[13]]+theme(legend.key.size = unit(0.3, "cm"),legend.position=c(0.3,0.25),legend.title = element_text(size=16,face = "bold", family = "serif"),legend.text = element_text( size=16, family = "serif")),
   plot_PD.depth[[10]]+theme(legend.key.size = unit(0.3, "cm"),legend.position=c(0.3,0.25),legend.title = element_text(size=16,face = "bold", family = "serif"),legend.text = element_text( size=16, family = "serif")),
   plot_PD.depth[[7]]+theme(legend.key.size = unit(0.3, "cm"),legend.position=c(0.3,0.25),legend.title = element_text(size=16,face = "bold", family = "serif"),legend.text = element_text( size=16, family = "serif")),
@@ -648,10 +648,10 @@ names(biodiv_final_all.subset)
 
 #Converting wide to long and summing up occurrence wrt to each lat bin
 LTT    <- biodiv_final_all.subset %>% 
-          pivot_longer(cols = Acrocarpus_fraxinifolius:Agasthiyamalai_pauciflora,
-          names_to="species", values_to="occ") %>% filter(occ!=0) %>% 
-          mutate(lat_bin=round(y)) %>% dplyr::select(-x,-y) %>% 
-          group_by(lat_bin,species) %>% summarise(occ=sum(occ))
+  pivot_longer(cols = Acrocarpus_fraxinifolius:Agasthiyamalai_pauciflora,
+               names_to="species", values_to="occ") %>% filter(occ!=0) %>% 
+  mutate(lat_bin=round(y)) %>% dplyr::select(-x,-y) %>% 
+  group_by(lat_bin,species) %>% summarise(occ=sum(occ))
 
 min(LTT$occ)
 LTT$occ[LTT$occ>1] <- 1   #Converting into presence absence maps      
@@ -708,19 +708,19 @@ LTT_lat.long$lat.bin<- as.numeric(LTT_lat.long$lat.bin)
 str(LTT_lat.long)
 
 LTT_lat_plot <- LTT_lat.long %>% 
-                ggplot(aes(x = reorder(age, desc(age)),y=log10(num), colour=lat.bin, group=lat.bin))+
-                geom_line()+xlab("Age")+ylab(expression(paste(log[10],"(Num of Lineages)")))+
-                scale_color_paletteer_c("grDevices::YlOrRd", direction = -1,name = "Latitudnal \nbins") +
-                geom_point( data= LTT_lat.long %>% filter(age==0),aes(x=age, y=log10(num)))+
-                geom_text_repel(data=LTT_lat.long %>% filter(age==0),aes(x=age, y=log10(num),label=lat.bin),direction = c("both", "y", "x"),size=8,max.overlaps = getOption("ggrepel.max.overlaps", default = 14))+
-                scale_x_discrete(breaks=c(135,seq(130,10, -10),0))+  theme_classic(base_size = 30)+
-                theme(legend.key.size = unit(1, "cm"),
-                      axis.title = element_text(size=20,face="bold", family="serif"),
-                      axis.text = element_text(size=20,colour = "black",family = "serif" ),
-                      legend.title = element_text( size=24,face = "bold", family = "serif"),
-                      legend.text = element_text(size=24,family = "serif"),
-                      legend.position=c(0.9,0.3))
-              
+  ggplot(aes(x = reorder(age, desc(age)),y=log10(num), colour=lat.bin, group=lat.bin))+
+  geom_line()+xlab("Age")+ylab(expression(paste(log[10],"(Num of Lineages)")))+
+  scale_color_paletteer_c("grDevices::YlOrRd", direction = -1,name = "Latitudnal \nbins") +
+  geom_point( data= LTT_lat.long %>% filter(age==0),aes(x=age, y=log10(num)))+
+  geom_text_repel(data=LTT_lat.long %>% filter(age==0),aes(x=age, y=log10(num),label=lat.bin),direction = c("both", "y", "x"),size=8,max.overlaps = getOption("ggrepel.max.overlaps", default = 14))+
+  scale_x_discrete(breaks=c(135,seq(130,10, -10),0))+  theme_classic(base_size = 30)+
+  theme(legend.key.size = unit(1, "cm"),
+        axis.title = element_text(size=20,face="bold", family="serif"),
+        axis.text = element_text(size=20,colour = "black",family = "serif" ),
+        legend.title = element_text( size=24,face = "bold", family = "serif"),
+        legend.text = element_text(size=24,family = "serif"),
+        legend.position=c(0.9,0.3))
+
 LTT_lat_plot
 
 
@@ -923,15 +923,15 @@ wrap_plots( mapply(plot_age_lat,rev(temp_age_list),label=label, SIMPLIFY = F),nr
 #converting the matrix into lat bins and reordering them
 
 WG_mat_lat_bin <- WG_mat %>% as.data.frame() %>% 
-                  mutate(grid=rownames(WG_mat)) %>% 
-                  separate(grid, c("long", "lat"), sep = ":") %>% 
-                  mutate(across(c(long, lat), parse_number)) %>% 
-                  dplyr::select(-long) %>% 
-                  pivot_longer(cols = colnames(WG_mat)[1]:
-                  colnames(WG_mat)[length(colnames(WG_mat))],
-                  names_to="species", values_to="occ") %>% filter(occ!=0) %>% 
-                  mutate(lat_bin=round(lat)) %>% dplyr::select(-lat) %>% 
-                  group_by(lat_bin,species) %>% summarise(occ=sum(occ))
+  mutate(grid=rownames(WG_mat)) %>% 
+  separate(grid, c("long", "lat"), sep = ":") %>% 
+  mutate(across(c(long, lat), parse_number)) %>% 
+  dplyr::select(-long) %>% 
+  pivot_longer(cols = colnames(WG_mat)[1]:
+                 colnames(WG_mat)[length(colnames(WG_mat))],
+               names_to="species", values_to="occ") %>% filter(occ!=0) %>% 
+  mutate(lat_bin=round(lat)) %>% dplyr::select(-lat) %>% 
+  group_by(lat_bin,species) %>% summarise(occ=sum(occ))
 
 min(WG_mat_lat_bin$occ)
 WG_mat_lat_bin$occ[WG_mat_lat_bin$occ>1] <- 1   #Converting into presence absence maps      
@@ -1107,8 +1107,8 @@ Lat_comm <- Lat_comm[,c(1,472,2:471)]
 #creating a new dataframe by pooling lats at biog zones
 Lat_biog_long <- Lat_comm %>% pivot_longer(cols = names(Lat_comm)[3]:names(Lat_comm)[472],
                                            names_to="species", values_to="occ") %>%
-                filter(occ!=0) %>% 
-                group_by(biog,species) %>% summarise(occ=sum(occ))
+  filter(occ!=0) %>% 
+  group_by(biog,species) %>% summarise(occ=sum(occ))
 
 Lat_biog_long$occ[Lat_biog_long$occ>1] <- 1 
 
@@ -1263,8 +1263,8 @@ family_PD_biog_lat <- (do.call(rbind,family_PD_biog_lat))
 #-------------------------4.c. Key families contributing to PD per lat bins-----------------------------
 family.PD.lat.df <- biodiv_final_all.subset %>% pivot_longer(cols = Acrocarpus_fraxinifolius:Agasthiyamalai_pauciflora,
                                                              names_to="species", values_to="occ") %>% filter(occ!=0) %>% 
-                     mutate(lat_bin=round(y)) %>% dplyr::select(-x,-y) %>% group_by(lat_bin,species) %>% 
-                     summarise(occ=sum(occ))
+  mutate(lat_bin=round(y)) %>% dplyr::select(-x,-y) %>% group_by(lat_bin,species) %>% 
+  summarise(occ=sum(occ))
 
 min(family.PD.lat.df$occ)
 family.PD.lat.df$occ[family.PD.lat.df$occ>1] <- 1         
@@ -1284,7 +1284,7 @@ for( i in 1:nrow(key.family))
   family.tree  <- prune.sample(family.PD.lat.final[,-1]  %>% dplyr::select(tmp.label$label),
                                phylo_tree_final)
   family.PD[[i]] <-   cbind(family=key.family[i,],PD=sum(family.tree$edge.length)) %>% 
-                      as.data.frame() %>% mutate(PD=as.numeric(PD))
+    as.data.frame() %>% mutate(PD=as.numeric(PD))
   
 }
 
@@ -1312,7 +1312,7 @@ family.PD.final %>% arrange(desc(PD)) %>% filter(PD >350)
 #10 families which have greater than 350 pd 
 
 family.PD.final %>% arrange(desc(PD)) %>% filter(PD >350) %>% summarise(select_pd=sum(PD))/
-                    family.PD.final %>% summarise(tot=sum(PD))
+  family.PD.final %>% summarise(tot=sum(PD))
 #0.56 total PD of *familes
 
 dom_family <- family.PD.final %>% arrange(desc(PD)) %>% filter(PD >300) %>% distinct(family)
@@ -1329,13 +1329,13 @@ Key_family_biog_PD_plot <- family_PD_biog_lat %>% group_by(biog) %>% mutate(tot_
                                  fontface="bold")+theme(legend.position = "none",#"top",legend.direction = "horizontal",
                                                         axis.text = element_text(colour = "black", size=25),
                                                         axis.title.x  = element_text(colour = "black", size=25))+ 
-                                 scale_fill_manual(values=c(rep("#FFFFE5",10)))+#scale_fill_manual(values=c(colorRampPalette(c("#662506","#FFFFE5"))(10)))+
-                                  guides(fill = guide_legend(nrow = 2, title=NULL)) 
+  scale_fill_manual(values=c(rep("#FFFFE5",10)))+#scale_fill_manual(values=c(colorRampPalette(c("#662506","#FFFFE5"))(10)))+
+  guides(fill = guide_legend(nrow = 2, title=NULL)) 
 
 #Adding number of families
 family_PD_biog_lat_plot <- family_PD_biog_lat %>% group_by(biog) %>% mutate(tot_pd=sum(pd),) %>% 
-                          rename("family"=taxonomic_group) %>% group_by(biog) %>% filter(pd!=0) %>%
-                          mutate(Num_fam=n_distinct(family))
+  rename("family"=taxonomic_group) %>% group_by(biog) %>% filter(pd!=0) %>%
+  mutate(Num_fam=n_distinct(family))
 
 family_PD_biog_lat_plot<- left_join(family_PD_biog_lat %>% group_by(biog) %>% mutate(tot_pd=sum(pd),) %>% 
                                       rename("family"=taxonomic_group) %>% 
@@ -1377,15 +1377,15 @@ All_sp_checklist.node %>% group_by(order,family) %>% filter(family %in% dom_fami
 # 10   Sapindales      Meliaceae     19     6     0.32
 
 fam_endem_list <- All_sp_checklist.node %>% group_by(order,family) %>% 
-                  mutate(Endemic=as.numeric(Endemic))%>% 
-                  summarise(num_sp=n_distinct(label),
-                            endem=sum(Endemic,na.rm=T)) %>% arrange(desc(num_sp)) %>%
-                  mutate(prop_end=round(endem/num_sp,2)) %>% 
-                  arrange(-num_sp,-prop_end) %>% as.data.frame()
+  mutate(Endemic=as.numeric(Endemic))%>% 
+  summarise(num_sp=n_distinct(label),
+            endem=sum(Endemic,na.rm=T)) %>% arrange(desc(num_sp)) %>%
+  mutate(prop_end=round(endem/num_sp,2)) %>% 
+  arrange(-num_sp,-prop_end) %>% as.data.frame()
 
 
 sp_endem_list <- All_sp_checklist.node %>% group_by(order,family, label) %>% arrange(order) %>% 
-                 dplyr::select(order,family, genus, label, Endemic)
+  dplyr::select(order,family, genus, label, Endemic)
 
 
 ############################################################################################
@@ -1395,11 +1395,10 @@ sp_endem_list <- All_sp_checklist.node %>% group_by(order,family, label) %>% arr
 #------------------------------------------------------------------------------------------#
 #-------------------------5.a.Examining correlations among WorldClim the predictors-------
 
-
 WG_pred_indices <- left_join(WG_all_indices[,-7] %>% 
-                              mutate(site=rownames(WG_all_indices)),
-                              WG_pred %>% mutate(site=rownames(WG_all_indices)),by="site") %>% 
-                              rename(x=x.x,y=y.x) %>% dplyr::select(-site,-x.y,-y.y)
+                               mutate(site=rownames(WG_all_indices)),
+                             WG_pred %>% mutate(site=rownames(WG_all_indices)),by="site") %>% 
+  rename(x=x.x,y=y.x) %>% dplyr::select(-site,-x.y,-y.y)
 
 WG_pred_indices %>% filter(is.na(elevation))
 #1 grid cell with no world clim value
@@ -1420,86 +1419,84 @@ corrplot(cor(WG_pred_indices[,c(2,8:28)]%>% filter(!is.na(elevation)) %>% rename
 dev.off()
 
 corrplot(cor(WG_pred_indices %>% dplyr::select(y, elevation, ann_prec, ann_mean_temp,  
-                                               prec_season,temp_season,CWD) %>% 
+                                               prec_season,temp_season,CWD, tri) %>% 
                filter(!is.na(elevation)) %>% 
                rename(Latitude=y)),
-               method="circle", addCoef.col ='black', 
-               diag=FALSE,order='alphabet', number.cex = 0.5)
+         method="circle", addCoef.col ='black', 
+         diag=FALSE,order='alphabet', number.cex = 0.5)
 
 dev.off()
 
 #-------------------------5.b.correlations of Key predictor with evolutionary diversity indices----------------------------------------
 
-#TILD
 TILD_plot <-WG_pred_indices %>% mutate(TILD=round(TILD,2)) %>% 
-  ggplot(aes(y=ann_prec,x=CWD, colour=TILD)) +geom_point()+
-  theme_bw()+ylab("Annual precipitation")+xlab("CWD")+ scale_colour_gradient(
-  breaks=c(min(WG_pred_indices$TILD),max(WG_pred_indices$TILD)),
-  low="#FFFFE5", high="#662506", name= "TILD")+theme_custom2+theme(legend.position = "none")+
-  xlab("")+
+    ggplot(aes(y=ann_prec,x=CWD, colour=TILD)) +geom_point()+
+    theme_bw()+ylab("Annual precipitation")+xlab("CWD")+ scale_colour_gradient(
+    breaks=c(min(WG_pred_indices$TILD),max(WG_pred_indices$TILD)),
+    low="#FFFFE5", high="#662506", name= "TILD")+theme_custom2+theme(legend.position = "none")+
+    xlab("")+
   
-  WG_pred_indices %>% mutate(TILD=round(TILD,2)) %>% 
-  ggplot(aes(x=ann_prec,y=elevation, colour=TILD)) +geom_point()+
-  theme_bw()+xlab("Annual precipitation")+ylab("Elevation")+ scale_colour_gradient(
-  breaks=c(min(WG_pred_indices$TILD),max(WG_pred_indices$TILD)),
-  low="#FFFFE5", high="#662506", name= "TILD")+ theme_custom2+
-  theme(legend.position = "none")+ scale_x_continuous(expand = c(0.1,0.1))+    xlab("")+
+    WG_pred_indices %>% mutate(TILD=round(TILD,2)) %>% 
+    ggplot(aes(x=ann_prec,y=tri, colour=TILD)) +geom_point()+
+    theme_bw()+xlab("Annual precipitation")+ylab("TRI")+ scale_colour_gradient(
+    breaks=c(min(WG_pred_indices$TILD),max(WG_pred_indices$TILD)),
+    low="#FFFFE5", high="#662506", name= "TILD")+ theme_custom2+
+    theme(legend.position = "none")+ scale_x_continuous(expand = c(0.1,0.1))+    xlab("")+
   
-  WG_pred_indices %>%  mutate(TILD=round(TILD,2)) %>% 
-  ggplot(aes(x=elevation,y=CWD, colour=TILD)) +geom_point()+
-  theme_bw()+xlab("Elevation")+ylab("CWD")+ scale_colour_gradient(
-  breaks=c(round(min(WG_pred_indices$TILD),2),round(max(WG_pred_indices$TILD),2)),
-  low="#FFFFE5", high="#662506", name= "TILD")+theme_custom2+    xlab("")
+    WG_pred_indices %>%  mutate(TILD=round(TILD,2)) %>% 
+    ggplot(aes(x=tri,y=CWD, colour=TILD)) +geom_point()+
+    theme_bw()+xlab("TRI")+ylab("CWD")+ scale_colour_gradient(
+    breaks=c(round(min(WG_pred_indices$TILD),2),round(max(WG_pred_indices$TILD),2)),
+    low="#FFFFE5", high="#662506", name= "TILD")+theme_custom2+    xlab("")
 #PD    
 PD_plot <-  WG_pred_indices %>% mutate(PD=round(PD,2)) %>% 
-  ggplot(aes(y=ann_prec,x=CWD, colour=PD)) +geom_point()+
-  theme_bw()+ylab("Annual precipitation")+xlab("CWD")+ scale_colour_gradient(
-  breaks=c(min(WG_pred_indices$PD),max(WG_pred_indices$PD)),
-  low="#FFFFE5", high="#662506", name= "PD")+theme_custom2+theme(legend.position = "none")+
-  xlab("")+
+    ggplot(aes(y=ann_prec,x=CWD, colour=PD)) +geom_point()+
+    theme_bw()+ylab("Annual precipitation")+xlab("CWD")+ scale_colour_gradient(
+    breaks=c(min(WG_pred_indices$PD),max(WG_pred_indices$PD)),
+    low="#FFFFE5", high="#662506", name= "PD")+theme_custom2+theme(legend.position = "none")+
+    xlab("")+
   
-  WG_pred_indices %>% mutate(PD=round(PD,2)) %>% 
-  ggplot(aes(x=ann_prec,y=elevation, colour=PD)) +geom_point()+
-  theme_bw()+xlab("Annual precipitation")+ylab("Elevation")+ scale_colour_gradient(
-  breaks=c(min(WG_pred_indices$PD),max(WG_pred_indices$PD)),
-  low="#FFFFE5", high="#662506", name= "PD")+ theme_custom2+
-  scale_x_continuous(expand = c(0.1,0.1))+theme(legend.position = "none")+    xlab("")+
+    WG_pred_indices %>% mutate(PD=round(PD,2)) %>% 
+    ggplot(aes(x=ann_prec,y=tri, colour=PD)) +geom_point()+
+    theme_bw()+xlab("Annual precipitation")+ylab("TRI")+ scale_colour_gradient(
+    breaks=c(min(WG_pred_indices$PD),max(WG_pred_indices$PD)),
+    low="#FFFFE5", high="#662506", name= "PD")+ theme_custom2+
+    scale_x_continuous(expand = c(0.1,0.1))+theme(legend.position = "none")+    xlab("")+
   
-  WG_pred_indices %>%  mutate(PD=round(PD,2)) %>% 
-  ggplot(aes(x=elevation,y=CWD, colour=PD)) +geom_point()+
-  theme_bw()+xlab("Elevation")+ylab("CWD")+ scale_colour_gradient(
-  breaks=c(round(min(WG_pred_indices$PD),2),round(max(WG_pred_indices$PD),2)),
-  low="#FFFFE5", high="#662506", name= "PD")+theme_custom2+  xlab("")
+    WG_pred_indices %>%  mutate(PD=round(PD,2)) %>% 
+    ggplot(aes(x=tri,y=CWD, colour=PD)) +geom_point()+
+    theme_bw()+xlab("TRI")+ylab("CWD")+ scale_colour_gradient(
+    breaks=c(round(min(WG_pred_indices$PD),2),round(max(WG_pred_indices$PD),2)),
+    low="#FFFFE5", high="#662506", name= "PD")+theme_custom2+  xlab("")
 #PE
 PE_plot <-  WG_pred_indices %>% mutate(PE=round(PE,2)) %>% 
-           ggplot(aes(y=ann_prec,x=CWD, colour=PE)) +geom_point()+
-           theme_bw()+ylab("Annual precipitation")+xlab("CWD")+ scale_colour_gradient(
-          breaks=c(min(WG_pred_indices$PE),max(WG_pred_indices$PE)),
-          low="#FFFFE5", high="#662506", name= "PE")+theme_custom2+theme(legend.position = "none")+
+     ggplot(aes(y=ann_prec,x=CWD, colour=PE)) +geom_point()+
+     theme_bw()+ylab("Annual precipitation")+xlab("CWD")+ scale_colour_gradient(
+     breaks=c(min(WG_pred_indices$PE),max(WG_pred_indices$PE)),
+     low="#FFFFE5", high="#662506", name= "PE")+theme_custom2+theme(legend.position = "none")+
   
   
-  WG_pred_indices %>% mutate(PE=round(PE,2)) %>% 
-  ggplot(aes(x=ann_prec,y=elevation, colour=PE)) +geom_point()+
-  theme_bw()+xlab("Annual precipitation")+ylab("Elevation")+ scale_colour_gradient(
-  breaks=c(min(WG_pred_indices$PE),max(WG_pred_indices$PE)),
-  low="#FFFFE5", high="#662506", name= "PE")+ theme_custom2+
-  scale_x_continuous(expand = c(0.1,0.1))+theme(legend.position = "none")+  
+    WG_pred_indices %>% mutate(PE=round(PE,2)) %>% 
+    ggplot(aes(x=ann_prec,y=tri, colour=PE)) +geom_point()+
+    theme_bw()+xlab("Annual precipitation")+ylab("TRI")+ scale_colour_gradient(
+    breaks=c(min(WG_pred_indices$PE),max(WG_pred_indices$PE)),
+    low="#FFFFE5", high="#662506", name= "PE")+ theme_custom2+
+    scale_x_continuous(expand = c(0.1,0.1))+theme(legend.position = "none")+  
   
-  WG_pred_indices %>%  mutate(PE=round(PE,2)) %>% 
-  ggplot(aes(x=elevation,y=CWD, colour=PE)) +geom_point()+
-  theme_bw()+xlab("Elevation")+ylab("CWD")+ scale_colour_gradient(
-  breaks=c(round(min(WG_pred_indices$PE),2),round(max(WG_pred_indices$PE),2)),
-  low="#FFFFE5", high="#662506", name= "PE")+theme_custom2
+    WG_pred_indices %>%  mutate(PE=round(PE,2)) %>% 
+    ggplot(aes(x=tri,y=CWD, colour=PE)) +geom_point()+
+    theme_bw()+xlab("TRI")+ylab("CWD")+ scale_colour_gradient(
+    breaks=c(round(min(WG_pred_indices$PE),2),round(max(WG_pred_indices$PE),2)),
+    low="#FFFFE5", high="#662506", name= "PE")+theme_custom2
 
 wrap_plots(TILD_plot,PD_plot,PE_plot,nrow=3)
 
 
-
 dat <- WG_pred_indices %>% filter(!is.na(elevation))  %>% 
-      dplyr::select(PD, CWD)
+       dplyr::select(PD, CWD)
 
 cor.test(dat$CWD,dat$PD) 
-cor.test(dat$CWD,dat$PD,method=c("spearman")) 
+cor.test(dat$CWD,dat$PD,method=c("pearson")) 
 
 rm(dat)
 
@@ -1534,7 +1531,7 @@ reg_cor <- function(div_index,preds)
 }
 
 div_index <- c("TILD","PD", "PE")
-preds <- c("elevation","ann_prec","CWD")
+preds <- c("tri","ann_prec","CWD")
 
 
 cor_est <- list()
@@ -1547,6 +1544,7 @@ for(j in 1:3){
 
 cor_est <- (do.call(rbind,cor_est))
 cor_est %>% arrange(pred)
+
 #write.xlsx(cor_est,paste0(final_sub_path,"/Final_plots/6_Dec_22/Tables/corr_evol_div_6Dec22.xlsx"))
 
 ###############################################################################
@@ -1686,7 +1684,7 @@ units = "in", width= 22, height = 4, dpi =600)
 
 #-------------------------------Figure 3: Correlates of evolutionary diversity-------------------
 wrap_plots(TILD_plot,PD_plot,PE_plot,nrow=3)
-#ggsave(paste0(final_sub_path,"/Final_plots/6_Dec_22/3_Environmental_correlates.png"), plot=last_plot(), units="in", dpi=600,
+#ggsave(paste0(final_sub_path,"/Final_plots/6_Dec_22/3_Environmental_correlates_28_Feb_23.png"), plot=last_plot(), units="in", dpi=600,
 width=12, height=8)
 #-------------------------------Figure 4a: Superorder contribution at each time period-------------------
 superorder_age_PD_plot <- 
@@ -1737,7 +1735,7 @@ Key_family_biog_PD_plot <- family_PD_biog_lat %>% group_by(biog) %>% mutate(tot_
          axis.title.x  = element_text(colour = "black", size=25),
          text=element_text(family="Times"))+theme(legend.position = "none",#"top",legend.direction = "horizontal",
          )+ scale_fill_manual(values=c(rep("#FFFFE5",10)))
-  #scale_fill_manual(values=c(colorRampPalette(c("#996D50","#FFFFE5"))(10)))
+#scale_fill_manual(values=c(colorRampPalette(c("#996D50","#FFFFE5"))(10)))
 #guides(fill = guide_legend(nrow = 2, title=NULL))
 
 #colorRampPalette(c("#996D50","#FFFFE5"))(10)
@@ -1824,20 +1822,20 @@ biodiv_final_all %>% mutate(site=rownames(biodiv_final_all)) %>%
 plot=last_plot(), units = "in", width= 8, height = 8, dpi =600)
 
 #-------------------------------Figure S3---------------------------------------
-#png(filename=paste0(final_sub_path,"/Final_plots/6_Dec_22/Supple/S3a_All_pred_correlations_10km_6Dec22.png"),
+#png(filename=paste0(final_sub_path,"/Final_plots/6_Dec_22/Supple/S3a_All_pred_correlations_10km_1Mar23.png"),
 width=12, height = 10, units = "in",res=600)
 
 par(cex=1.5)
-corrplot(cor(WG_pred_indices[,c(2,8:28)]%>% filter(!is.na(elevation)) %>% rename(latitude=y)), method="circle", addCoef.col ='black', 
+corrplot(cor(WG_pred_indices[,c(2,7:28)]%>% filter(!is.na(elevation)) %>% rename(latitude=y)), method="circle", addCoef.col ='black', 
          diag=FALSE, type = "lower",order='alphabet', number.cex = 0.3)
 dev.off()
 
 par(cex=2)
 
-#png(filename=paste0(final_sub_path,"/Final_plots/6_Dec_22/Supple/S3b_Select_pred_correlations_10km_6Dec22.png"),width=12, height = 8, units = "in",res=600)
+#png(filename=paste0(final_sub_path,"/Final_plots/6_Dec_22/Supple/S3b_Select_pred_correlations_10km_1Mar23.png"),width=12, height = 8, units = "in",res=600)
 
 corrplot(cor(WG_pred_indices %>% dplyr::select(y, elevation, ann_prec, ann_mean_temp,  
-                                               prec_season,temp_season,CWD) %>% 
+                                               prec_season,temp_season,CWD,tri) %>% 
                filter(!is.na(elevation)) %>% 
                rename(Latitude=y)),
          method="circle", addCoef.col ='black', 
