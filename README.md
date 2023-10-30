@@ -1,4 +1,4 @@
-# Evolutionary diveristy of Western Ghats woody plants
+# Evolutionary diversity of Western Ghats woody plants
 
 The code examines the evolutionary diversity of woody plants in the Western Ghats. It takes in the output of the SDMs run for 348 species and occurence locations for 122 species, which is stacked at 10x10 km resolution. The phylogenetic tree is built using V. phylomaker. For more details refer to the Methods section in the manuscript. The code for the SDMs is taken from https://github.com/bhartidk/centipede_diversity_endemism
 
