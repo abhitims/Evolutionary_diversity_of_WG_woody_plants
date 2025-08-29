@@ -22,6 +22,7 @@ The data and the code can be used for non-commercial purposes (The MIT Licence).
 Gopal, A., Bharti, D. K., Page, N., Dexter, K. G., Krishnamani, R., Kumar, A., & Joshi, J. (2023). Range restricted old and young lineages show the southern Western Ghats to be both museum and cradle of diversity for woody plants. *Proceedings of the Royal Society B*.
 
 # Data overview
+***Currently we have kept some aspects of this data under embargo as we working on follow up questions on this. Kindly reach out to me if you need any additional info on the same***
 
 **Appedix_S3_processed_data.zip**  
 
